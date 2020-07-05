@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_subscriptions/models/models.dart';
 import 'package:my_subscriptions/repos/subs_repository.dart';
-import 'package:my_subscriptions/subscription/bloc/bloc.dart';
 
 part 'subscription_event.dart';
 part 'subscription_state.dart';

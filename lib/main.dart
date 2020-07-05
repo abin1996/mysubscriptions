@@ -14,15 +14,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
-  final FirebaseSubscriptionRepository subscriptionRepository =
-      FirebaseSubscriptionRepository();
   runApp(
     BlocProvider(
       create: (context) => AuthenticationBloc(userRepository: userRepository)
         ..add(AuthenticationStarted()),
       child: App(
         userRepository: userRepository,
-        firebaseSubscriptionRepository: subscriptionRepository,
       ),
     ),
   );
@@ -30,16 +27,13 @@ void main() {
 
 class App extends StatelessWidget {
   final UserRepository _userRepository;
-  final FirebaseSubscriptionRepository _firebaseSubscriptionRepository;
 
   App(
       {Key key,
-      @required UserRepository userRepository,
-      @required FirebaseSubscriptionRepository firebaseSubscriptionRepository})
+      @required UserRepository userRepository})
       : assert(
-            userRepository != null && firebaseSubscriptionRepository != null),
+            userRepository != null),
         _userRepository = userRepository,
-        _firebaseSubscriptionRepository = firebaseSubscriptionRepository,
         super(key: key);
 
   @override
@@ -81,11 +75,13 @@ class App extends StatelessWidget {
             return LoginScreen(userRepository: _userRepository);
           }
           if (state is AuthenticationSuccess) {
+            final FirebaseSubscriptionRepository subscriptionRepository =
+      FirebaseSubscriptionRepository(state.displayName);
             return BlocProvider(
-              create: (context) => SubscriptionBloc(subscriptionRepository: _firebaseSubscriptionRepository)..add(LoadSubscription()),
+              create: (context) => SubscriptionBloc(subscriptionRepository: subscriptionRepository)..add(LoadSubscription()),
               child: HomeScreen(
                   name: state.displayName,
-                  subscriptionRepository: _firebaseSubscriptionRepository),
+                  subscriptionRepository: subscriptionRepository),
             );
           }
           return Container();
