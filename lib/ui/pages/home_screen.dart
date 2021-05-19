@@ -4,6 +4,7 @@ import 'package:my_subscriptions/auth/authentication_bloc.dart';
 import 'package:my_subscriptions/models/models.dart';
 import 'package:my_subscriptions/repos/firebase_subs_repository.dart';
 import 'package:my_subscriptions/subscription/bloc/subscription_bloc.dart';
+import 'package:my_subscriptions/ui/widgets/subscription_form.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (_) => createAddSubscriptionDialog(context),
+                builder: (_) => addSubscriptionDialog(context),
                 barrierDismissible: false);
           },
           tooltip: "Add a new Subscription",
@@ -84,6 +85,8 @@ class HomeScreen extends StatelessWidget {
               ),
             );
           }
+          state.subscriptions
+              .removeWhere((element) => element.subsName == "NOSUBSCRIPTION");
           return Expanded(
             child: ListView.builder(
                 itemCount: subscriptions.length,
@@ -102,42 +105,21 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  createAddSubscriptionDialog(BuildContext context) {
+  addSubscriptionDialog(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return AlertDialog(
-      content: addSubscriptionForm(context),
+      content: SingleChildScrollView(
+        child: SubscriptionForm(
+          formKey: formKey,
+          subscriptionRepository: subscriptionRepository,
+        ),
+      ),
       title: Text(
         "Add Subscription",
         style: Theme.of(context).textTheme.headline6,
       ),
       buttonPadding: EdgeInsets.all(12.0),
       clipBehavior: Clip.antiAlias,
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () => Navigator.of(context).pop(),
-          autofocus: false,
-          child: Text("Close"),
-        ),
-        FlatButton(
-          onPressed: () {},
-          autofocus: true,
-          child: Text(
-            "Add",
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget addSubscriptionForm(context) {
-    return SingleChildScrollView(
-      child: Form(
-        child: TextFormField(
-          decoration: InputDecoration(
-              labelText: 'Name',
-              labelStyle: Theme.of(context).textTheme.bodyText1),
-        ),
-      ),
     );
   }
 }
