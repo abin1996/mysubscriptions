@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_subscriptions/auth/authentication_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:my_subscriptions/bloc_delegate.dart';
 import 'package:my_subscriptions/repos/firebase_subs_repository.dart';
 import 'package:my_subscriptions/repos/user_repository.dart';
@@ -10,8 +11,9 @@ import 'package:my_subscriptions/ui/pages/home_screen.dart';
 import 'package:my_subscriptions/ui/pages/login_screen.dart';
 import 'package:my_subscriptions/ui/pages/splash_screen.dart';
 
-void main() {
+void main () async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
   runApp(

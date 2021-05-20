@@ -6,9 +6,10 @@ import 'package:my_subscriptions/repos/subs_repository.dart';
 import 'package:my_subscriptions/entities/entities.dart';
 
 class FirebaseSubscriptionRepository implements SubscriptionRepository {
-  var subscriptionCollection = Firestore.instance.collection("");
+  CollectionReference subscriptionCollection;
   FirebaseSubscriptionRepository(String userEmail) {
-    this.subscriptionCollection = Firestore.instance.collection(userEmail);
+    this.subscriptionCollection =
+        FirebaseFirestore.instance.collection(userEmail);
   }
   @override
   Future<void> addNewSubscription(Subscription subscription) {
@@ -17,14 +18,13 @@ class FirebaseSubscriptionRepository implements SubscriptionRepository {
 
   @override
   Future<void> deleteSubscription(Subscription subscription) async {
-    return subscriptionCollection.document(subscription.subsId).delete();
+    return subscriptionCollection.doc(subscription.subsId).delete();
   }
 
   @override
   Stream<List<Subscription>> subscriptions() {
-    print(subscriptionCollection.snapshots());
     return subscriptionCollection.snapshots().map((snapshot) {
-      return snapshot.documents
+      return snapshot.docs
           .map((doc) =>
               Subscription.fromEntity(SubscriptionEntity.fromSnapshot(doc)))
           .toList();
@@ -34,7 +34,7 @@ class FirebaseSubscriptionRepository implements SubscriptionRepository {
   @override
   Future<void> updateSubscription(Subscription subscription) {
     return subscriptionCollection
-        .document(subscription.subsId)
-        .updateData(subscription.toEntity().toDocument());
+        .doc(subscription.subsId)
+        .update(subscription.toEntity().toDocument());
   }
 }

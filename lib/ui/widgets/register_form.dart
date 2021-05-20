@@ -34,7 +34,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSubmitting) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -49,11 +49,12 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context)
+              .add(AuthenticationLoggedIn());
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -76,23 +77,20 @@ class _RegisterFormState extends State<RegisterForm> {
             child: Form(
               child: ListView(
                 children: <Widget>[
-                  Text(
-                    'Register',
-                    style: Theme.of(context).textTheme.headline1
-                  ),
+                  Text('Register',
+                      style: Theme.of(context).textTheme.headline1),
                   SizedBox(
                     height: 150,
                   ),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-
                       border: OutlineInputBorder(),
                       labelText: 'Enter your Email',
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return !state.isEmailValid ? 'Invalid Email' : null;
                     },
@@ -108,7 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     ),
                     obscureText: true,
                     autocorrect: false,
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (_) {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },

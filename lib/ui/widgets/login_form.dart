@@ -46,32 +46,31 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Login Failure'), Icon(Icons.error)],
-                ),
-                backgroundColor: Colors.red,
+            ..showSnackBar(SnackBar(
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [Text('Login Failure'), Icon(Icons.error)],
               ),
-            );
+              backgroundColor: Colors.red,
+            )
+          );
         }
         if (state.isSubmitting) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Logging In...'),
-                    CircularProgressIndicator(),
-                  ],
-                ),
+            ..showSnackBar(SnackBar(
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Logging In...'),
+                  CircularProgressIndicator()
+                ],
               ),
-            );
+              backgroundColor: Colors.red,
+            )
+          );
         }
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context)
@@ -85,23 +84,19 @@ class _LoginFormState extends State<LoginForm> {
             child: Form(
               child: ListView(
                 children: <Widget>[
-                  Text(
-                    'Sign In',
-                    style: Theme.of(context).textTheme.headline1
-                  ),
+                  Text('Sign In', style: Theme.of(context).textTheme.headline1),
                   SizedBox(
                     height: 150,
                   ),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(               
+                    decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                         labelText: 'Enter your Email',
                         labelStyle: Theme.of(context).textTheme.bodyText1),
                     keyboardType: TextInputType.emailAddress,
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     autocorrect: false,
                     validator: (_) {
                       return !state.isEmailValid ? 'Invalid Email' : null;
@@ -114,12 +109,11 @@ class _LoginFormState extends State<LoginForm> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                         labelText: 'Password',
                         labelStyle: Theme.of(context).textTheme.bodyText1),
                     obscureText: true,
-                    autovalidate: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     autocorrect: false,
                     validator: (_) {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
@@ -138,11 +132,9 @@ class _LoginFormState extends State<LoginForm> {
                         SizedBox(
                           height: 20,
                         ),
-                        Text(
-                          '- OR -',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyText1
-                        ),
+                        Text('- OR -',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyText1),
                         SizedBox(
                           height: 20,
                         ),

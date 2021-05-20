@@ -12,8 +12,14 @@ class SubscriptionEntity extends Equatable {
   // final Url renewalLink;
   // final String status;
 
-  const SubscriptionEntity(this.subsId, this.subsName, this.subsStartDate,
-      this.yearlyPrice, this.currencyCode, this.renewalFrequency, this.renewalTimeFrame);
+  const SubscriptionEntity(
+      this.subsId,
+      this.subsName,
+      this.subsStartDate,
+      this.yearlyPrice,
+      this.currencyCode,
+      this.renewalFrequency,
+      this.renewalTimeFrame);
 
   Map<String, Object> toJson() {
     return {
@@ -55,15 +61,15 @@ class SubscriptionEntity extends Equatable {
     );
   }
 
-  static SubscriptionEntity fromSnapshot(DocumentSnapshot snap) {
+  static SubscriptionEntity fromSnapshot(QueryDocumentSnapshot snap) {
     return SubscriptionEntity(
-      snap.documentID,
-      snap.data['subsName'],
-      DateTime.parse(snap.data['subsStartDate'].toDate().toString()),
-      snap.data['yearlyPrice'].toDouble(),
-      snap.data['currencyCode'],
-      snap.data['renewalFrequency'].toInt(),
-      snap.data['renewalTimeFrame'],
+      snap.id,
+      snap.get('subsName'),
+      DateTime.parse(snap.get('subsStartDate').toDate().toString()),
+      snap.get('yearlyPrice').toDouble(),
+      snap.get('currencyCode'),
+      snap.get('renewalFrequency'),
+      snap.get('renewalTimeFrame'),
     );
   }
 

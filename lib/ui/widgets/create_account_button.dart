@@ -13,7 +13,7 @@ class CreateAccountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: Text(
         'Create an Account',
         style: TextStyle(
