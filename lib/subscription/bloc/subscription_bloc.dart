@@ -14,9 +14,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
 
   SubscriptionBloc({@required SubscriptionRepository subscriptionRepository})
       : assert(subscriptionRepository != null),
-        _subscriptionRepository = subscriptionRepository;
-  @override
-  SubscriptionState get initialState => SubscriptionLoadInProgress();
+        _subscriptionRepository = subscriptionRepository, super(SubscriptionLoadInProgress());
 
   @override
   Stream<SubscriptionState> mapEventToState(
