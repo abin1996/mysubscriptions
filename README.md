@@ -1,2 +1,3 @@
 # mysubscriptions
-Flutter App to manage subscriptions
+Flutter App to manage your various subscriptions be it Netflix, Spotify, Hulu
+Currently WIP
